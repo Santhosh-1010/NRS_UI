@@ -1,52 +1,16 @@
-# Task Manager
+# React + Vite
 
-A full-stack task management app: Express REST API backend + React (Vite) frontend, with JWT-based login.
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-## Structure
+Currently, two official plugins are available:
 
-```
-backend/   Express API, in-memory task store, JWT auth
-frontend/  React app (Vite + Tailwind CSS)
-```
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Backend
+## React Compiler
 
-```bash
-cd backend
-npm install
-cp .env.example .env   # optional, defaults work out of the box
-npm run dev            # http://localhost:4000
-```
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Demo login: `admin` / `password123`
+## Expanding the Oxlint configuration
 
-### API
-
-All `/api/tasks` routes require `Authorization: Bearer <token>`, obtained from `POST /api/auth/login`.
-
-| Method | Path              | Description                                  |
-|--------|-------------------|-----------------------------------------------|
-| POST   | /api/auth/login   | Returns a JWT for demo credentials            |
-| GET    | /api/tasks        | List tasks. Supports `sortBy`, `order`, `page`, `limit` query params |
-| GET    | /api/tasks/:id    | Get a single task                             |
-| POST   | /api/tasks        | Create a task (`title` required, `description`/`completed` optional) |
-| PUT    | /api/tasks/:id    | Update a task (any subset of `title`/`description`/`completed`) |
-| DELETE | /api/tasks/:id    | Delete a task                                 |
-
-Run tests: `npm test` (Jest + Supertest).
-
-## Frontend
-
-```bash
-cd frontend
-npm install
-cp .env.example .env   # optional, defaults point at localhost:4000
-npm run dev            # http://localhost:5173
-```
-
-Log in with the demo credentials above. Tasks are fetched from the backend on load; create, edit, complete, and delete all hit the live API. Sorting and pagination are handled server-side.
-
-## Notes
-
-- Task storage is in-memory and resets whenever the backend restarts.
-- The JWT secret and demo credentials are for local/demo use only — not production-ready as-is.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
