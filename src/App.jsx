@@ -5,6 +5,7 @@ import Login from './components/Login';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import Pagination from './components/Pagination';
+import Button from './components/Button';
 
 const PAGE_SIZE = 10;
 
@@ -70,12 +71,13 @@ export default function App() {
             <h1 className="text-base sm:text-xl font-bold text-white truncate">Task Manager</h1>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <button
+            <Button
               onClick={logout}
-              className="text-sm font-medium text-white bg-white/15 hover:bg-white/25 rounded-md px-3 py-1.5 transition-colors"
+              size="sm"
+              className="text-white bg-white/15 hover:bg-white/25"
             >
               Log out
-            </button>
+            </Button>
           </div>
         </div>
       </header>

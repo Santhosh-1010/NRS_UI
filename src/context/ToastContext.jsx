@@ -37,7 +37,7 @@ export function ToastProvider({ children }) {
   };
 
   return (
-    <ToastContext.Provider value={{ showToast, showError, showSuccess }}>
+    <ToastContext.Provider value={{ showError, showSuccess }}>
       {children}
       <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 w-80 max-w-[calc(100vw-2rem)]">
         {toasts.map((toast) => (

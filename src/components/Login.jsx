@@ -1,24 +1,17 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useAsyncAction } from '../hooks/useAsyncAction';
+import Button from './Button';
 
 export default function Login() {
   const { login } = useAuth();
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('password123');
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, runSubmit] = useAsyncAction('Login failed');
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    setError('');
-    setIsSubmitting(true);
-    try {
-      await login(username, password);
-    } catch (err) {
-      setError(err.message || 'Login failed');
-    } finally {
-      setIsSubmitting(false);
-    }
+    runSubmit(() => login(username, password));
   }
 
   return (
@@ -57,15 +50,14 @@ export default function Login() {
           />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
-
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-medium py-2 rounded-md transition-colors"
+          fullWidth
+          className="bg-indigo-600 hover:bg-indigo-700 py-2"
         >
           {isSubmitting ? 'Logging in...' : 'Log In'}
-        </button>
+        </Button>
       </form>
     </div>
   );

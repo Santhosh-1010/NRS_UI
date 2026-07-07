@@ -42,5 +42,3 @@ export const tasksApi = {
   update: (token, id, updates) => request(`/tasks/${id}`, { method: 'PUT', body: updates, token }),
   remove: (token, id) => request(`/tasks/${id}`, { method: 'DELETE', token }),
 };
-
-export { ApiClientError };
