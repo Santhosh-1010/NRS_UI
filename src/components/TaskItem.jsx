@@ -10,6 +10,7 @@ export default function TaskItem({ task, columns, onUpdate, onDelete }) {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
+  const [completed, setCompleted] = useState(task.completed);
   const [titleError, setTitleError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const { showSuccess } = useToast();
@@ -35,7 +36,7 @@ export default function TaskItem({ task, columns, onUpdate, onDelete }) {
       return;
     }
 
-    runSaveEdit(() => onUpdate(task.id, { title: title.trim(), description: description.trim() }), {
+    runSaveEdit(() => onUpdate(task.id, { title: title.trim(), description: description.trim(), completed }), {
       onSuccess: () => {
         setIsEditing(false);
         showSuccess('Task updated successfully');
@@ -56,6 +57,7 @@ export default function TaskItem({ task, columns, onUpdate, onDelete }) {
     setIsEditing(false);
     setTitle(task.title);
     setDescription(task.description);
+    setCompleted(task.completed);
     setTitleError('');
     setDescriptionError('');
   }
@@ -79,19 +81,9 @@ export default function TaskItem({ task, columns, onUpdate, onDelete }) {
           if (key === 'completed') {
             return (
               <td key={key} className="px-3 sm:px-5 py-3 text-center">
-                <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={handleToggleCompleted}
-                    disabled={isBusy}
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                    aria-label={`Mark "${task.title}" as ${task.completed ? 'incomplete' : 'completed'}`}
-                  />
-                  <span className={`text-sm font-medium ${task.completed ? 'text-emerald-600' : 'text-slate-500'}`}>
-                    {task.completed ? 'Yes' : 'No'}
-                  </span>
-                </label>
+                <span className={`text-sm font-medium ${task.completed ? 'text-emerald-600' : 'text-slate-500'}`}>
+                  {task.completed ? 'Yes' : 'No'}
+                </span>
               </td>
             );
           }
@@ -107,9 +99,9 @@ export default function TaskItem({ task, columns, onUpdate, onDelete }) {
               variant="icon"
               iconColor="blue"
               onClick={() => setIsEditing(true)}
-              disabled={isBusy}
+              disabled={isBusy || task.completed}
               aria-label={`Edit "${task.title}"`}
-              title="Edit"
+              title={task.completed ? 'Completed tasks cannot be edited' : 'Edit'}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -179,13 +171,25 @@ export default function TaskItem({ task, columns, onUpdate, onDelete }) {
               />
               {descriptionError && <p className="text-sm text-red-600 mt-1">{descriptionError}</p>}
             </div>
-            <div className="flex items-center justify-end gap-2 pt-2">
-              <Button type="button" variant="neutral" size="sm" onClick={closeEdit}>
-                Cancel
-              </Button>
-              <Button type="submit" variant="primary" size="sm" disabled={isSavingEdit}>
-                Save
-              </Button>
+            <div className="flex items-center justify-between gap-2 pt-2">
+              <label htmlFor={`edit-completed-${task.id}`} className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700">
+                <input
+                  id={`edit-completed-${task.id}`}
+                  type="checkbox"
+                  checked={completed}
+                  onChange={(e) => setCompleted(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span>Completed</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <Button type="button" variant="neutral" size="sm" onClick={closeEdit}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="primary" size="sm" disabled={isSavingEdit}>
+                  Save
+                </Button>
+              </div>
             </div>
           </form>
         </Modal>

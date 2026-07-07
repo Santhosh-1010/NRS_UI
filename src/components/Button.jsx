@@ -16,6 +16,7 @@ export default function Button({
   size = 'md',
   fullWidth = false,
   className = '',
+  type = 'button',
   ...props
 }) {
   const sizeClass = variant === 'icon' ? '' : size === 'sm' ? 'text-sm px-4 py-1.5' : 'px-4 py-1.5';
@@ -26,5 +27,5 @@ export default function Button({
     .filter(Boolean)
     .join(' ');
 
-  return <button className={classNames} {...props} />;
+  return <button type={type} className={classNames} {...props} />;
 }

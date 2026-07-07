@@ -41,9 +41,24 @@ export default function App() {
   }, [loadTasks]);
 
   async function handleCreate(task) {
-    await tasksApi.create(token, task);
-    setPage(1);
-    await loadTasks();
+    try {
+      const createdTask = await tasksApi.create(token, task);
+      const normalizedTask = createdTask ?? { ...task, id: Date.now() };
+
+      setTasks((currentTasks) => [normalizedTask, ...currentTasks].slice(0, PAGE_SIZE));
+      setPagination((currentPagination) => ({
+        ...currentPagination,
+        total: Math.max(0, currentPagination.total + 1),
+        totalPages: Math.max(1, Math.ceil((Math.max(0, currentPagination.total + 1)) / PAGE_SIZE)),
+      }));
+      setPage(1);
+    } catch (err) {
+      if (err.status === 401) {
+        logout();
+      } else {
+        setError(err.message || 'Failed to create task');
+      }
+    }
   }
 
   async function handleUpdate(id, updates) {

@@ -31,7 +31,6 @@ export default function TaskForm({ onCreate }) {
         setTitle('');
         setDescription('');
         setCompleted(false);
-        setIsOpen(false);
         showSuccess('Task added successfully');
       },
     });
@@ -97,7 +96,12 @@ export default function TaskForm({ onCreate }) {
               />
               {descriptionError && <p className="text-sm text-red-600 mt-1">{descriptionError}</p>}
             </div>
-            <div>
+           
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+            <div />
+            <div className="flex items-center justify-between gap-4">
               <label htmlFor="new-completed" className="flex items-center gap-2 cursor-pointer select-none">
                 <input
                   id="new-completed"
@@ -108,14 +112,11 @@ export default function TaskForm({ onCreate }) {
                 />
                 <span className="text-sm text-slate-700">completed</span>
               </label>
+              <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2 shadow-sm hover:shadow">
+                <span className="text-base leading-none">+</span>
+                {isSubmitting ? 'Adding...' : 'Add Task'}
+              </Button>
             </div>
-          </div>
-
-          <div className="flex items-center justify-end mt-3">
-            <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2 shadow-sm hover:shadow">
-              <span className="text-base leading-none">+</span>
-              {isSubmitting ? 'Adding...' : 'Add Task'}
-            </Button>
           </div>
         </form>
       )}
