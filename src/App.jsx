@@ -7,7 +7,7 @@ import TaskList from './components/TaskList';
 import Pagination from './components/Pagination';
 import Button from './components/Button';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 3;
 
 export default function App() {
   const { token, logout } = useAuth();
@@ -42,16 +42,12 @@ export default function App() {
 
   async function handleCreate(task) {
     try {
-      const createdTask = await tasksApi.create(token, task);
-      const normalizedTask = createdTask ?? { ...task, id: Date.now() };
-
-      setTasks((currentTasks) => [normalizedTask, ...currentTasks].slice(0, PAGE_SIZE));
-      setPagination((currentPagination) => ({
-        ...currentPagination,
-        total: Math.max(0, currentPagination.total + 1),
-        totalPages: Math.max(1, Math.ceil((Math.max(0, currentPagination.total + 1)) / PAGE_SIZE)),
-      }));
-      setPage(1);
+      await tasksApi.create(token, task);
+      if (page === 1) {
+        await loadTasks();
+      } else {
+        setPage(1);
+      }
     } catch (err) {
       if (err.status === 401) {
         logout();
