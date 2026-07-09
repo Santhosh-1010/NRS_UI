@@ -7,7 +7,7 @@ import TaskList from './components/TaskList';
 import Pagination from './components/Pagination';
 import Button from './components/Button';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 10;
 
 export default function App() {
   const { token, logout } = useAuth();
